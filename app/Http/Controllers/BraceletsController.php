@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Bracelet;
+use App\Model\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +30,7 @@ class BraceletsController extends Controller
 
         return view('bracelets.index',compact('bracelets','bracelets_img'));
     }
+
 
     /**
      * Show the form for creating a new resource.

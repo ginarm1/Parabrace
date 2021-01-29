@@ -32,7 +32,7 @@
                             {{Form::submit('Update user',['class'=>'btn btn-dark'])}}
                             {!! Form::close() !!}
 
-                            <a href="./" class="btn btn-secondary" >Cancel</a>
+                            <a href="./" class="btn btn-secondary d-inline" >Cancel</a>
                         </form>
                     </div>
                 </div>

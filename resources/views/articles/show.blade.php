@@ -43,9 +43,9 @@
                 <a href="./" class="more-articles-show"><button class="btn btn-dark">More articles...</button></a>
                 @if(Gate::allows('admins-only'))
                     <a href="./{{$article -> id}}/edit" class="edit-article"><button class="btn btn-light">Edit</button></a>
-                    {{--                Fake delete, after confirmation, real delet btn appears--}}
+{{--                                    Fake delete, after confirmation, real delet btn appears--}}
                     <button class="btn btn-danger mt-3" id="btn_delete" style="height: 5vh">Delete</button>
-                    {{--                Real delete--}}
+{{--                                    Real delete--}}
                     {{Form::open(['action'=>['ArticlesController@destroy',$article-> id],'method'=>'POST', 'class'=>'mt-3'])}}
                     {{Form::hidden('_method','DELETE')}}
                     {{Form::submit('DELETE',['class'=>'btn btn-danger','id'=>'btn_delete_real'])}}

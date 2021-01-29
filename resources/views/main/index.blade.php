@@ -1,4 +1,7 @@
 <style>
+    .card-article:first-child{
+        margin-left: -5rem;
+    }
     @media (max-width: 1110px) {
         .row{
             flex-direction: column;
@@ -40,13 +43,12 @@
 <div class="container-fluid">
 {{--    <a href="./articles" class="more-articles"><button class="btn btn-dark">More articles...</button></a>--}}
     <div class="row jumbotron">
-
         @foreach($articles as $article)
 
-            <div class="card mr-4">
+            <div class="card-article card mr-4">
                     <h2>{{$article -> name}}</h2>
                         @if($article -> image != null)
-                            <img src="storage/img/articles/{{$article ->image}}" alt="article-img">
+                            <img class="card-article-img" src="storage/img/articles/{{$article ->image}}" alt="article-img">
                         @endif
 
                     <p>{{$article -> intro}}</p>
@@ -56,7 +58,9 @@
                     <a href="./articles/{{$article -> id}}"><button class="btn btn-light">Read more ></button></a>
             </div>
         @endforeach
-            <a href="./articles" class="more-articles m-3"><button class="btn btn-dark">More articles...</button></a>
+            <div class="container text-center mt-4">
+                <a href="./articles" class="more-articles m-3"><button class="btn btn-light" id="more-articles-btn">More articles...</button></a>
+            </div>
     </div>
 </div>
 
@@ -64,5 +68,5 @@
 
 @section('js')
     {{--    JS--}}
-    <script src="{{asset('js/script.js')}}"></script>
+    <script src="{{asset('js/main-page.js')}}"></script>
 @endsection

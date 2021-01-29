@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Model\Article;
+use App\Http\Requests;
+use App\Http\Resources\ArticleResource as ArticleResource;
 use App\Model\Partner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,12 +14,16 @@ class ArticlesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        $articles = Article::all();
+//        For Resources to work, pagination is a must
+        $count = Article::all() -> count();
+        $articless = Article::paginate($count);
 
+//        return ArticleResource::collection($articles);
+        $articles = ArticleResource::collection($articless);
         return view('articles.index', compact('articles'));
     }
 
@@ -41,6 +47,10 @@ class ArticlesController extends Controller
     public function store(Request $request)
     {
         $this->validateData();
+
+//           API edition
+//            $article = $request->isMethod('put')
+//                ? ArticleResource::findOrFail ($request->id) : new ArticleResource;
 
 //        Create plan
            $article = new Article;
@@ -66,21 +76,23 @@ class ArticlesController extends Controller
            if($partner != null){
                $article -> save();
                $article -> partners() -> attach($partner[0]->id);
+               //  API edition
+           //  return new ArticleResource($article);
            }
 
-//        return view('articles.create',compact('number'));
-        return redirect('/articles')->with('success','Article is created');
+        return redirect('/articles','success','ArticleResource is created');
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return ArticleResource|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show($id)
     {
-        $article = Article::find($id);
+        $article = Article::findOrFail($id);
+//        return new ArticleResource($article);
         return view('articles.show',compact('article'));
     }
 
@@ -92,9 +104,9 @@ class ArticlesController extends Controller
      */
     public function edit($id)
     {
-        $article = Article::find($id);
+        $article = Article::findOrFail($id);
 
-        return view('articles.edit')->with('article',$article);
+        return view('articles.edit',compact('article') );
     }
 
     /**
@@ -108,7 +120,7 @@ class ArticlesController extends Controller
     {
         $this->validateData();
 //        Update plan
-        $article = Article::find($id);
+        $article = Article::findOrFail($id);
         $article -> name = $request -> input('name');
         $article -> intro = $request -> input('intro');
         $article -> text = $request -> input('text');
@@ -143,7 +155,7 @@ class ArticlesController extends Controller
 
 
 
-        return redirect('/articles/'.$article->id)->with('success','Article is updated');
+        return redirect('/articles/'.$article->id)->with('success','ArticleResource is updated');
     }
 
     protected function validateData(){
@@ -157,10 +169,10 @@ class ArticlesController extends Controller
 
     public function removePartner($articleId,$partnerId){
 
-        $article = Article::find($articleId);
+        $article = Article::findOrFail($articleId);
         $article -> partners() -> detach($partnerId);
-//        $article = Article::find($article -> id);
-        return redirect('/articles')->with('success','Partner is removed from article');
+//        $article = ArticleResource::find($article -> id);
+        return redirect('/articles','success','Partner is removed from article');
     }
     /**
      * Remove the specified resource from storage.
@@ -170,9 +182,14 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        $article = Article::find($id);
+        $article = Article::findOrFail($id);
         $article->delete();
-        return redirect('/articles')->with('success','Article is deleted');
+        return redirect('../articles','success','ArticleResource is deleted');
+
+//        API edition
+//        if($article -> delete())  {
+//            return new ArticleResource($article);
+//        }
     }
 
 

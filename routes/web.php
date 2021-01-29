@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\CartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticlesController;
+use App\Http\Controllers\BraceletsController;
+use App\Http\Controllers\PartnersController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,14 +17,22 @@ use App\Http\Controllers\ArticlesController;
 */
 
 Route::get('/','MainController@index');
-Route::resource('bracelets','BraceletsController');
-Route::resource('articles','ArticlesController');
 
+Route::resource('bracelets','BraceletsController');
+Route::post('bracelets/buy/{id}',[CartController::class,'addToCart']);
+
+Route::resource('articles','ArticlesController');
 Route::post('articles/{articleId}/edit/{partnerId}',[ArticlesController::class,'removePartner']);
 
-Route::resource('partners','PartnersController');
+Route::resource('partners','PartnersController',['except'=> [
+    'show'
+]]);
 
-Route::resource('profile','ProfileController');
+Route::get('cart',[CartController::class,'index']);
+
+Route::resource('profile','ProfileController',['except' => [
+    'index','create','store','destroy'
+]]);
 
 
 Auth::routes();

@@ -102,7 +102,7 @@ class PartnersController extends Controller
 
         $partner -> save();
 
-        return redirect('../partners','success','Partner was updated');
+        return redirect('../partners',);
     }
 
     /**

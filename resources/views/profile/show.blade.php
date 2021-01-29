@@ -19,8 +19,9 @@
                         <h5><b>Phone nr.:</b> {{$user-> phone_nr}}</h5>
                         <h5><b>City:</b> {{$user-> city}}</h5>
                         <h5><b>Address:</b> {{$user-> address}}</h5>
+                        <a href="./{{$user->id}}/edit"><button class=" btn btn-dark mb-5 w-25">Edit</button></a>
                     </div>
-                    <a href="./{{$user->id}}/edit"><button class=" btn btn-dark mb-5 w-25">Edit</button></a>
+
                 </div>
             </div>
         </div>

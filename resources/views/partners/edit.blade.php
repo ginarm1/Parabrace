@@ -43,7 +43,7 @@
                 </div>
 
                 {{Form::hidden('_method','PUT')}}
-                {{Form::submit('Add partner',['class'=>'btn btn-primary'])}}
+                {{Form::submit('Update partner',['class'=>'btn btn-secondary'])}}
                 {!! Form::close() !!}
 
                 <button class="btn btn-danger mt-3" id="btn_delete">Delete</button>
@@ -52,7 +52,7 @@
                 {{Form::submit('DELETE',['class' => 'btn btn-danger','id'=>'btn_delete_real'])}}
                 {!! Form::close() !!}
 
-                <a href="./"><button class="btn btn-light mt-3">Cancel</button></a>
+                <a href="../"><button class="btn btn-light mt-3">Cancel</button></a>
             </div>
 
         </div>

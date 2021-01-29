@@ -1,17 +1,17 @@
 
 $(document).ready(function(){
 
-    var card = $(".card");
+    let card = $(".card-article");
 
-    var cardEven = $(".card:even");
-    var cardEvenImg = $(".card:even img");
-    var cardEvenP = $(".card:even p");
-    var cardEvenBtn = $(".card:even a");
+    let cardEven = $(".card-article:even");
+    let cardEvenImg = $(".card-article:even img");
+    let cardEvenP = $(".card-article:even p");
+    let cardEvenBtn = $(".card-article:even a");
 
-    var cardOdd= $(".card:odd");
-    var cardOddImg= $(".card:odd img");
-    var cardOddP = $(".card:odd p");
-    var cardOddBtn = $(".card:odd a");
+    let cardOdd= $(".card-article:odd");
+    let cardOddImg= $(".card-article:odd img");
+    let cardOddP = $(".card-article:odd p");
+    let cardOddBtn = $(".card-article:odd a");
 
     cardOddBtn.hide();
     cardEvenBtn.hide();

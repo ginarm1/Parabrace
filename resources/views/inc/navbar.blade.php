@@ -1,3 +1,10 @@
+<?php
+    if( session()-> has('cart-items-count') ){
+        session(['cart-items-count'=> count(\App\Model\Item::all())]);
+    }else{
+        session(['cart-items-count'=> 20]);
+    }
+?>
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <a href="{{url("/")}}"><img src="{{asset("img/Logo.png")}}" alt="Logo" width="130px"></a>
     <div class="container">
@@ -19,7 +26,9 @@
                 <li><a class="nav-link pr-4" href="{{url('bracelets')}}">Bracelets</a></li>
                 <li><a class="nav-link pr-4" href="{{url('articles')}}">Articles</a></li>
                 <li><a class="nav-link pr-4" href="{{url('partners')}}">Partners</a></li>
-
+                <li><a class="nav-link pr-4" href="{{url('cart')}}"><i class="fas fa-shopping-cart"></i>
+                        <span class="badge ml-2 rounded-circle bg-secondary text-white"><?php echo session('cart-items-count');?></span></a></li>
+{{--                $_SESSION['cart-items-count'--}}
                 @guest
 
                     @if (Route::has('login'))

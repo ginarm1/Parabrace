@@ -17,6 +17,10 @@ $(document).ready(function(){
     var card3p = $(".card:nth-child(3) p");
     var card3btn = $(".card:nth-child(3) a");
 
+    card1p.hide();
+    card2p.hide();
+    card3p.hide();
+
     $('.content').scrollTop(function(){
         card3.animate({
             left: '3%',

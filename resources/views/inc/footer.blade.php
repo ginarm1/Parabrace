@@ -18,8 +18,8 @@
 
         <div class="box-social-btns">
             <ul class="social-btn">
-                <li><a  href="https://www.facebook.com/vairada/"><i class="fab fa-facebook-f"></i></a> </li>
-                <li><a  href="https://www.instagram.com/vairada/"><i class="fab fa-instagram"></i></a> </li>
+                <li><a  href="https://www.facebook.com/gintaras.armonaitis/"><i class="fab fa-facebook-f"></i></a> </li>
+                <li><a  href="https://www.instagram.com/gintarasarm/"><i class="fab fa-instagram"></i></a> </li>
                 <li><a><i class="far fa-envelope"></i> </a><span class="tool" id="creator-email">gintaras.armonaitis@gmail.com</span> </li>
             </ul>
         </div>

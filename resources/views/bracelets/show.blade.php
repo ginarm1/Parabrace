@@ -2,7 +2,7 @@
 @section('content')
 
     <!--Bracelets container-->
-    <div class="container-show-br">
+    <div class="container-show-br" style="background: #faf4ed">
 {{--        <div class="row">--}}
 
             <!--Single bracelet pic-->
@@ -16,7 +16,7 @@
                         <h2 name="bracelet-name" class="name">{{$bracelet->name}}</h2> <h2 class="mb-4">paracord bracelet</h2>
                         @if($bracelet -> lower_cost!= null && $bracelet -> lower_cost < $bracelet -> cost)
                             <h2 class="text-danger mr-2" style="display: inline">€ {{$bracelet->lower_cost}}</h2>
-                            <h5 style="display: inline">€ {{$bracelet->cost}}</h5>
+                            <h5 style="display: inline">€ <del>{{$bracelet->cost}}</del></h5>
                         @else
                             <h2 name="text-success" class="text-success">€ {{$bracelet->cost}}</h2>
                         @endif
@@ -29,6 +29,10 @@
                             <p>Suits for men and women</p>
                         </div>
                          @if(Gate::allows('admins-only'))
+                            {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id],'method'=>'POST' , 'class' => 'mt-3']) !!}
+                            {{Form::hidden('_method','POST')}}
+                            {{Form::submit('To the car',['class' => 'btn btn-danger mb-4'])}}
+                            {!! Form::close() !!}
 
                             <a href="./{{$bracelet->id}}/edit"><button class="btn btn-secondary">Edit</button></a>
                             <button class="btn btn-danger mt-3 ml-3" id="btn_delete">Delete</button>

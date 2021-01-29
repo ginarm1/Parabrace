@@ -85,7 +85,7 @@ class ProfileController extends Controller
 
         $user -> save();
 
-        return redirect('/','Profile is updated');
+        return redirect('./','Success','Profile is updated');
     }
 
     /**
