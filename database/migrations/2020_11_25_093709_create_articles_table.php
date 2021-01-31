@@ -13,21 +13,17 @@ class CreateArticlesTable extends Migration
      */
     public function up()
     {
-        if(Schema::hasTable('articles')){
-            Schema::table('articles',function (Blueprint $table){
-                $table->string('intro');
-                $table->timestamps();;
-            });
-        }else{
-            Schema::create('articles', function (Blueprint $table) {
-                $table->id('article_id');
-                $table-> string('name',255);
-                $table-> string('intro');
-                $table->text('description');
-                $table->mediumText('image')->nullable();
-                $table->timestamps();
-            });
-        }
+//        if(Schema::hasTable('articles')){
+//        }
+        Schema::create('articles', function (Blueprint $table) {
+            $table->id('article_id');
+            $table->string('name') -> unique();
+            $table->mediumText('intro');
+            $table->text('text');
+            $table->string('image')->nullable();
+            $table->timestamps();
+        });
+
     }
 
     /**

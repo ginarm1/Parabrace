@@ -14,7 +14,13 @@ class CreateBraceletsTable extends Migration
     public function up()
     {
         Schema::table('bracelets', function (Blueprint $table) {
-//            $table->id();
+            $table->id();
+            $table->string('name',40) -> unique();
+            $table->integer('on_stock_quantity');
+            $table->double('cost',10,2);
+            $table->double('lower_cost',10,2)-> nullable();
+            $table->integer('sold_quantity') -> $this->default(0);
+            $table->string('image') -> nullable();
             $table->timestamps();
         });
     }
