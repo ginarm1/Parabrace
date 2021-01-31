@@ -74,7 +74,7 @@
                     {!! Form::close() !!}
                     <hr class="light">
                 @endforeach
-                <a href="./"><button class="btn btn-light mt-3">Cancel</button></a>
+                <a href="{{route('articles')}}"><button class="btn btn-light mt-3">Cancel</button></a>
             </div>
 
         </div>

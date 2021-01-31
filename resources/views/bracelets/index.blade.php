@@ -3,7 +3,8 @@
     <!--Bracelets container-->
     <div class="bracelets-container" style="margin-top: 30px; margin-bottom: 80px">
         @if(Gate::allows('admins-only'))
-            <a href="./bracelets/create" class="mt-3" style="height: 60%"><button class="btn btn-dark">Add Bracelet</button></a>
+{{--            <a href="./bracelets/create" class="mt-3" style="height: 60%"><button class="btn btn-dark">Add Bracelet</button></a>--}}
+            <a href="{{route('bracelets')}}/create" class="mt-3" style="height: 60%"><button class="btn btn-dark">Add Bracelet</button></a>
         @endif
 
         @if($bracelets != null)
@@ -28,7 +29,8 @@
 {{--                        <button class="btn btn-danger mb-4" style="border-radius: 15px">To the cart</button>--}}
                     </div>
                 @else
-                    <a href="./bracelets/{{$bracelet->id}}" class="bracelet-link" style="color: #990606">
+{{--                    <a href="./bracelets/{{$bracelet->id}}" class="bracelet-link" style="color: #990606">--}}
+                    <a href="{{route('bracelets')}}/{{$bracelet->id}}" class="bracelet-link" style="color: #990606">
                         <div class="bracelets pt-3" style="background: #ffffff">
                             <img src="storage/img/bracelets/{{$bracelet -> image}}" style="width: 350px" alt="bracelet-photo">
                             <h5 style="color: black">{{$bracelet -> name}}</h5>

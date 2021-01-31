@@ -40,9 +40,9 @@
                 <h4 class="mt-4 mb-4">{{$article -> intro}}</h4>
                 <p>{{$article -> text}}</p>
 
-                <a href="./" class="more-articles-show"><button class="btn btn-dark">More articles...</button></a>
+                <a href="{{route('articles')}}" class="more-articles-show"><button class="btn btn-dark">More articles...</button></a>
                 @if(Gate::allows('admins-only'))
-                    <a href="./{{$article -> id}}/edit" class="edit-article"><button class="btn btn-light">Edit</button></a>
+                    <a href="{{route('articles')}}/{{$article -> id}}/edit" class="edit-article"><button class="btn btn-light">Edit</button></a>
 {{--                                    Fake delete, after confirmation, real delet btn appears--}}
                     <button class="btn btn-danger mt-3" id="btn_delete" style="height: 5vh">Delete</button>
 {{--                                    Real delete--}}

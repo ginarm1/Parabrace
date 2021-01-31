@@ -42,7 +42,7 @@
                 {{Form::submit('Add bracelet',['class'=>'btn btn-dark'])}}
                 {!! Form::close() !!}
 
-                <a href="./" class="btn btn-secondary mt-4" >Cancel</a>
+                <a href="{{route('bracelets')}}" class="btn btn-secondary mt-4" >Cancel</a>
             </div>
 
         </div>
