@@ -1,5 +1,7 @@
 # Parabrace
 E-commerce based bracelets shop. Bracelets are made out of parachute roup. The website has some animation in the articles and main page sections. The articles and cart front-end pages were made with Vue.js and other pages with blade. Articles can have partners. Logged in user can edit his/her profile.
+##
+E-komercijos apyrankių parduotuvė. Apyrankės gaminamos iš parašiutinės virvės. Svetainėje yra keletas straipsnių su animacija ir pagrindinio puslapio skiltyse. Straipsniai ir krepšelio puslapiai buvo padaryti su „Vue.js“ ir kiti puslapiai su „Blade“ šablonu. Straipsniai gali turėti partnerių. Prisijungęs vartotojas gali redaguoti savo profilį.
 
 ## Installing
 
