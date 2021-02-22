@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +22,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('articles',[ArticleController::class,'index']);
+Route::prefix('/articles') -> group( function (){
+    Route::get('/{id}',[ArticleController::class,'show']);
+    Route::delete('/{id}',[ArticleController::class,'destroy']);
+});
+
+
 Route::get('cart',[CartController::class,'api']);
 Route::get('cart/{id}',[CartController::class,'show']);
+Route::put('cart',[CartController::class,'store']);
 Route::delete('cart/{id}',[CartController::class,'destroy']);
 Route::post('bracelets/buy/{id}',[CartController::class,'addToCart']);
 

@@ -218,21 +218,19 @@ button{
 .bracelets-container{
     display: flex;
     justify-content: space-evenly;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     background: lightblue;
 }
 .bracelets{
     margin: 1rem;
-    /*height: 5%;*/
     background: #ffffff;
     text-align: center;
     border: 1px solid #c8c8c8;
     border-radius: 15px;
 }
-/*.bracelet-link{*/
-/*    !*height: 60%;*!*/
-/*}*/
+
 .bracelet-link:link{
+    flex-flow: nowrap;
     text-decoration: none;
 }
 
@@ -242,9 +240,6 @@ button{
     justify-content: space-evenly;
     padding: 1.5rem;
     display: flex;
-    /*display: grid;*/
-    /*grid-template-columns: repeat(22,1fr);*/
-    /*grid-gap: 1rem;*/
 }
 .single-br-pic img{
     justify-content: center;

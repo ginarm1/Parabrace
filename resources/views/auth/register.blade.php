@@ -5,10 +5,10 @@
 </style>
 @extends('layout.app')
 @section('content')
-<div class="container" style="height: 100%">
+<div class="container my-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card" style="opacity: 1; border: 1px solid black; height: 100%">
+            <div class="card" style="opacity: 1; border: 1px solid black;">
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">

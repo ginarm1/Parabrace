@@ -16,14 +16,14 @@
         <p>Šeštadienis: 10 am - 1 pm</p>
         <p>Sekmadienis: ----------</p>
 
-        <div class="box-social-btns">
+        <div class="box-social-btns my-4">
             <ul class="social-btn">
                 <li><a  href="https://www.facebook.com/gintaras.armonaitis/"><i class="fab fa-facebook-f"></i></a> </li>
                 <li><a  href="https://www.instagram.com/gintarasarm/"><i class="fab fa-instagram"></i></a> </li>
                 <li><a><i class="far fa-envelope"></i> </a><span class="tool" id="creator-email">gintaras.armonaitis@gmail.com</span> </li>
             </ul>
         </div>
-        <div class="box-creators">
+        <div class="box-creators my-4">
             <p style="text-align: center">&copy; Gintaras Armonaitis, 2020</p>
         </div>
     </div>

@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Resources\ArticleResource as ArticleResource;
 use App\Model\Partner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ArticlesController extends Controller
@@ -34,7 +35,6 @@ class ArticlesController extends Controller
      */
     public function create()
     {
-
         return view('articles.create');
     }
 
@@ -105,7 +105,6 @@ class ArticlesController extends Controller
     public function edit($id)
     {
         $article = Article::findOrFail($id);
-
         return view('articles.edit',compact('article') );
     }
 

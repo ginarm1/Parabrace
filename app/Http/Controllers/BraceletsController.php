@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CartResource;
 use App\Model\Bracelet;
 use App\Model\Item;
+use App\Model\Order;
+use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -26,9 +29,26 @@ class BraceletsController extends Controller
     public function index()
     {
         $bracelets = Bracelet::paginate(3);
-        $bracelets_img = Bracelet::select('image') -> where('name','Lithuanian') -> get();
 
-        return view('bracelets.index',compact('bracelets','bracelets_img'));
+        $user_id = Auth::id();
+
+
+        if($user_id != null){
+            $last_order = Order::where('user_id',$user_id)->orderBy('id','desc')->first();
+
+            if($last_order != null){
+                if($last_order->total_cost == 0.00){
+                    $empty_cart = false;
+                    $items = Item::where('order_id',$last_order->id)->get();
+
+                    return view('bracelets.index',compact('bracelets','items','user_id','empty_cart'));
+                }else{
+                    $empty_cart = true;
+                    return view('bracelets.index',compact('bracelets','user_id','empty_cart'));
+                }
+            }
+        }
+        return view('bracelets.index',compact('bracelets','user_id'));
     }
 
 
@@ -39,11 +59,7 @@ class BraceletsController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->role_id == 2) {
-            return view('bracelets.create');
-        }else{
-            abort(404);
-        }
+        return view('bracelets.create');
     }
 
     /**
@@ -88,11 +104,7 @@ class BraceletsController extends Controller
     public function show($id)
     {
         $bracelet = Bracelet::find($id);
-        if(Auth::user()->role_id > 0) {
-            return view('bracelets.show', compact('bracelet'));
-        }else{
-            abort(404);
-        }
+        return view('bracelets.show', compact('bracelet'));
     }
 
     /**
@@ -104,11 +116,7 @@ class BraceletsController extends Controller
     public function edit($id)
     {
         $bracelet = Bracelet::find($id);
-        if(Auth::user()->role_id == 2) {
-            return view('bracelets.edit', compact('bracelet'));
-        }else{
-            abort(404);
-        }
+        return view('bracelets.edit', compact('bracelet'));
     }
 
     /**
@@ -157,12 +165,8 @@ class BraceletsController extends Controller
      */
     public function destroy($id)
     {
-        if(Auth::user()->role_id == 2) {
-            $bracelet = Bracelet::find($id);
-            $bracelet->delete();
-            return redirect('/bracelets', 'success', 'Bracelet is deleted');
-        }else{
-            abort(404);
-        }
+        $bracelet = Bracelet::find($id);
+        $bracelet->delete();
+        return redirect('/', 'success', 'Bracelet is deleted');
     }
 }

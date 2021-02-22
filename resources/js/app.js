@@ -10,7 +10,6 @@
 
 // import articlesView from "./components/articlesView";
 import Articles from "./components/Articles";
-import ArticleShow from "./components/ArticleShow";
 import Cart from "./components/Cart";
 
 window.axios = require('axios');
@@ -38,9 +37,9 @@ window.Vue = require('vue');
  */
 
 const app = new Vue({
-    el: '#appv',
+    el: '#app',
     components: {
-        Articles, ArticleShow,Cart
+        Articles,Cart
     }
 
 });

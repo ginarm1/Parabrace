@@ -12,4 +12,19 @@ class ArticleController extends Controller
     public function index () {
         return ArticleResource::collection(Article::all());
     }
+
+    public function show($id) {
+        $article = Article::findOrFail($id);
+        return new ArticleResource($article);
+    }
+
+    public function destroy($id) {
+        $article = Article::findOrFail($id);
+
+        if($article->delete()){
+            return new ArticleResource($article);
+        }
+    }
+
+
 }

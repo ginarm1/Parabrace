@@ -1,17 +1,8 @@
 @extends('layout.app')
 @section('content')
-    <style>
-        /*.items-container{*/
-        /*    display: flex;*/
-        /*    justify-content: space-evenly;*/
-        /*    flex-wrap: wrap;*/
-        /*}*/
-    </style>
-    <div class="items-container container">
-        <div id="appv">
-            <Cart></Cart>
-        </div>
-
+    <div id="app" style="background: #fff7ed">
+{{--        <p>Order: {{$order[0]}}</p>--}}
+        <Cart></Cart>
     </div>
 @endsection
 

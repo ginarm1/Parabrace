@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Model\Bracelet;
 use App\Model\Item;
 use App\Http\Resources\CartResource as CartResource;
+use App\Model\Order;
+use App\Model\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -17,37 +20,82 @@ class CartController extends Controller
      */
     public function api()
     {
-//        $items = Item::all();
-        $items = CartResource::collection(Item::orderBy('created_at','DESC') -> paginate(4));
+        $order = Order::where('user_id',1)->latest()->get();
+
+        $items = CartResource::collection(Item::where('order_id',$order[0]->id) -> orderBy('created_at','DESC') -> paginate(4));
         return $items;
-//        return view('cart.index',compact('items'));
     }
     public function index(){
-        $items = CartResource::collection(Item::all());
-        return view('cart.index',compact('items'));
+//        $items = CartResource::collection(Item::all());
+//        $order = Order::where('user_id',1)->latest()->get();
+        $user_id = Auth::user()->id;
+        $itemsTemp = Item::where('user_id',$user_id)->get();
+        $items = CartResource::collection($itemsTemp);
+        return view('cart.index',compact('items','user_id'));
     }
 
-    public function addToCart($id){
-        $bracelet = Bracelet::findOrFail($id);
-        $item = new Item;
+    public function addToCart($bracelet_id){
+        $user_id = Auth::user()->id;
+        $bracelet = Bracelet::findOrFail($bracelet_id);
+        $not_sold_items = Item::where(['user_id'=>$user_id,'sold'=>0])->get();
+        $empty_cart = false;
+        $same_item = false;
+        if(count($not_sold_items) == 0){
+            $order = new Order;
+            $order -> user_id = $user_id;
+            $order -> country = Auth::user()->country;
+            $order -> city = Auth::user()->city;
+            $order -> address = Auth::user()->address;
+            $order -> phone_nr = Auth::user()->phone_nr;
+            $order -> save();
 
-        $item -> name = $bracelet -> name;
-        $item -> quantity += 1;
-        $item -> image = $bracelet -> image;
+            $empty_cart = true;
+            return redirect('/bracelets')->with('success','Item: '.$not_sold_items[0] -> name. ' has been added');
+        }
+        foreach ($not_sold_items as $not_sold_item) {
+            if($not_sold_item -> name == $bracelet -> name){
+                $not_sold_item -> quantity += 1;
+                $not_sold_item -> save();
 
-        if($bracelet -> lower_cost != null)
-            $item -> cost = $bracelet -> lower_cost;
-        else $item -> cost = $bracelet -> cost;
+                $items = Item::all();
+                session(['cart-items-count' =>count($items) ] );
+                return redirect('/bracelets')->with('success','Item: '.$not_sold_item -> name. ' has been added');
+            }
+        }
+        if($empty_cart || !$same_item){
+            $item = new Item;
+            $order = Order::where('user_id',$user_id)->latest()->get('id');
+
+            $item -> name = $bracelet -> name;
+            $item -> user_id = $user_id;
+            $item -> quantity += 1;
+            $item -> image = $bracelet -> image;
+            $item -> order_id = $order[0] -> id;
+            if($bracelet -> lower_cost != null)
+                $item -> cost = $bracelet -> lower_cost;
+            else $item -> cost = $bracelet -> cost;
+            $item -> save();
+
+            $items = Item::all();
+            session(['cart-items-count' =>count($items) ] );
+            return redirect('/bracelets')->with('success','Item: '.$item -> name. ' has been added');
+        }
+//        $item = new Item;
+//        $order = Order::where('user_id',$user_id)->latest()->get('id');
+//
+//        $item -> name = $bracelet -> name;
+//        $item -> user_id = $user_id;
+//        $item -> quantity += 1;
+//        $item -> image = $bracelet -> image;
+//        $item -> order_id = $order[0] -> id;
+
+//        if($bracelet -> lower_cost != null)
+//            $item -> cost = $bracelet -> lower_cost;
+//        else $item -> cost = $bracelet -> cost;
 
 
-        $item -> save();
+//        $item -> save();
 
-        $items = Item::all();
-
-        session(['cart-items-count' =>count($items) ] );
-
-
-        return redirect('/bracelets')->with('success','Item: '.$item -> name. ' has been added');
     }
     /**
      * Show the form for creating a new resource.

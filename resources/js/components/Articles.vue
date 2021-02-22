@@ -14,7 +14,6 @@
                      @mouseenter="article.show = !article.show" @mouseleave="article.show = !article.show"
                      v-for=" article in articles">
                     <h2>{{article.name}}</h2>
-                    <h1>{{color}}</h1>
 <!--                    storage/img/articles/-->
                     <img class="card-article-img" :src="article.image"
                          v-if="!article.show && article.image !== 'storage/img/articles/'" width="400px">
@@ -63,7 +62,6 @@ export default  {
             show: true,
             url: './articles/create',
             readMore: String,
-            colors: ['red','green','blue'],
         //    Partners
             partners: [],
             partner: {
@@ -87,15 +85,6 @@ export default  {
                 console.log("Error from axios: " + error)
             })
         },
-        getPartners () {
-            
-        }
-        // randomIndex () {
-        //     return Math.floor(Math.random() * this.colors.length)
-        // },
-        // randomColor(){
-        //     return this.colors[this.randomColor]
-        // },
     },
     computed: {
 

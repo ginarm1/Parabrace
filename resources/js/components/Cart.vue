@@ -1,20 +1,35 @@
 <template>
-    <div class="items-container container">
-            <div v-for="item in items" class="bracelets py-4 h-25">
-                <img class="card-item-img" :src="item.image" width="400px"  alt="item-photo">
-                <h5 class="p-3" style="color: black">{{ item.name }}</h5>
-                <div class="quantity-container">
-                    <button class="btn btn-light">-</button>
-                    <input class="h-25" type="number" min="0" max="20" :value="item.quantity">
-                    <button class="btn btn-light" @click="addOneItem(item)">+</button>
-                </div>
+    <div class="items-container container" v-if="items.length !== 0 && !isOrderFinished(items)">
 
-                <p style="display: inline">€ {{item.cost}}</p>
-                <div>
-                    <button @click="deleteArticle(item.id)" id="delete" class="btn btn-danger">Delete item</button>
+        <h2 class="total_label my-4" v-if="count === 0">Total Cost: € {{total = totalCost(items,0).toFixed(2)}}</h2>
+        <h2 class="total_label my-4" v-if="count !== 0">Total Cost: € {{total.toFixed(2)}}</h2>
+
+<!--            <form @submit.prevent="updateOrder" class="mb-3">-->
+<!--                <button class="btn btn-success" type="submit" >Save</button>-->
+<!--            </form>-->
+            <a href="/order"><button class="btn btn-primary">Go to order</button></a>
+
+            <div v-for="item in items" class="bracelets " >
+                <div v-if="item.sold === 0">
+
+                    <img class="card-item-img" :src="item.image" width="400px"  alt="item-photo">
+                    <p>ID: {{ item.id }}</p>
+                    <h5 class="p-3" style="color: black">{{ item.name }}</h5>
+<!--                    <h5 class="p-3" style="color: black">Sold: {{ item.sold }}</h5>-->
+                    <div class="quantity-container">
+                        <button class="btn btn-light" @click="minusOneItem(item);count++" v-if="item.quantity === 1" :disabled="minusOneItem(item)">-</button>
+                        <button class="btn btn-light" @click="minusOneItem(item); total = totalCostMinus(item,total);count++" v-else>-</button>
+                        <p>Quantity: {{ item.quantity }}</p>
+                        <button class="btn btn-light" @click="addOneItem(item);total = totalCostPlus(item,total);count++">+</button>
+                    </div>
+                    <p style="display: inline">€ {{ (item.cost * item.quantity).toFixed(2) }}</p>
+                    <div>
+                        <button @click="deleteArticle(item.id)" id="delete" class="btn btn-danger mb-3">Delete item</button>
+                    </div>
                 </div>
             </div>
-            <nav aria-label="Cart pages navigation">
+
+            <nav aria-label="Cart pages navigation" v-if="items.length !== 0">
                 <ul class="pagination">
                     <li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item"><a class="page-link" href="#" @click="fetchItems(pagination.prev_page_url)">Previous</a></li>
 
@@ -23,8 +38,12 @@
                     <li v-bind:class="[{disabled: !pagination.next_page_url}]" class="page-item"><a class="page-link" href="#" @click="fetchItems(pagination.next_page_url)">Next</a></li>
                 </ul>
             </nav>
-            <h3 v-if="items.length === 0">Cart is empty</h3>
+
+
     </div>
+    <h3 v-else class="text-center py-4">Cart is empty</h3>
+
+
 </template>
 
 <script>
@@ -34,18 +53,33 @@ export default {
             items: [],
             item: {
                 id: Number,
+                user_id: Number,
                 image: String,
                 name: String,
                 quantity: Number,
                 cost: Number,
+                sold: Number,
+                sum: Number,
             },
-            pagination: {}
+            total: 0.0,
+            count:0,
+            pagination: {},
         }
     },
     mounted() {
         this.fetchItems()
+
     },
     methods: {
+        isOrderFinished: (items) => {
+            let isFinished = true;
+            items.forEach( item => {
+                if(item.sold === 0){
+                    isFinished = false;
+                }
+            })
+            return isFinished;
+        },
         fetchItems (page_url) {
             page_url = page_url || '/api/cart';
             fetch(page_url)
@@ -56,17 +90,59 @@ export default {
                 })
                 .catch(err => console.log(err));
         },
-        addOneItem (item) {
+        updateOrder() {
             // Update
-            axios.put('api/cart/${item.id}',{
-                quantity:item.quantity + 1
+            fetch('api/cart', {
+                method: 'put',
+                body: JSON.stringify(this.item),
+                headers: {
+                    'content-type': 'application/json'
+                }
             })
                 .then(res => res.json())
                 .then(data => {
-                    // alert('Article Added');
+                    alert('Cart Updated');
                     this.fetchItems();
                 })
                 .catch(err => console.log(err));
+        },
+        totalCost: (items,total) => {
+            items.forEach(item => {
+                total += item.cost * item.quantity;
+            });
+            return total
+        },
+        totalCostMinus: (item,total) => {
+            total -= item.cost;
+            return  total
+        },
+        totalCostPlus: (item,total) => {
+            total += item.cost;
+            return  total
+        },
+        addOneItem (item) {
+            // Update
+            // axios.put('api/cart/${item.id}',{
+            //     quantity:item.quantity + 1
+            // })
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         // alert('Article Added');
+            //         this.fetchItems();
+            //     })
+            //     .catch(err => console.log(err));
+            if(item.quantity < 20){
+                item.quantity ++;
+                item.sum = item.cost * item.quantity;
+            }
+
+        },
+        minusOneItem(item){
+            if(item.quantity > 1){
+                item.quantity --;
+                item.sum = item.cost * item.quantity;
+            }
+            return item.sum;
         },
         makePagination(meta, links) {
             let pagination = {
@@ -102,5 +178,7 @@ export default {
     justify-content: space-evenly;
     flex-wrap: wrap;
 }
-
+.total_label{
+    width: 80vh;
+}
 </style>

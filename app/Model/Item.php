@@ -13,9 +13,16 @@ class Item extends Model
 
     protected $fillable = [
         'id',
+        'user_id',
         'name',
         'image',
         'quantity',
-        'cost'
+        'cost',
+        'sold',
+        'order_id'
     ];
+
+    public function bracelet () {
+        return $this -> hasOne(Bracelet::class);
+    }
 }

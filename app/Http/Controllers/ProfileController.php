@@ -46,9 +46,15 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        $user = Auth::user()->find($id);
-        $role_id = $user -> roles -> name;
-        return view('profile.show',compact('user','role_id'));
+
+        if(Auth::id() == $id){
+            $user = Auth::user()->find($id);
+            $role_id = $user -> roles -> name;
+            return view('profile.show',compact('user','role_id'));
+        }else{
+            return abort(404);
+        }
+
     }
 
     /**
@@ -59,8 +65,12 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        $user = Auth::user()->find($id);
-        return view('profile.edit', compact('user'));
+        if(Auth::id() == $id){
+            $user = Auth::user()->find($id);
+            return view('profile.edit', compact('user'));
+        }else{
+            return abort(404);
+        }
     }
 
     /**
@@ -73,13 +83,14 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $this -> validate($request,[
-            'phone_nr' => 'required|max:12',
+            'phone_nr' => 'required|min:8|max:14',
             'city' => 'required|string',
             'address' => 'required',
         ]);
 
         $user = Auth::user() -> find($id);
         $user -> phone_nr = $request -> input('phone_nr');
+        $user -> country = $request -> input('country');
         $user -> city = $request -> input('city');
         $user -> address = $request -> input('address');
 

@@ -1,9 +1,12 @@
 <?php
-    if( session()-> has('cart-items-count') ){
-        session(['cart-items-count'=> count(\App\Model\Item::all())]);
-    }else{
-        session(['cart-items-count'=> 20]);
-    }
+   if(\Illuminate\Support\Facades\Auth::user() != null){
+       if( session()-> has('cart-items-count') ){
+           session(['cart-items-count'=>
+               count(\App\Model\Item::where(['user_id'=>\Illuminate\Support\Facades\Auth::user()->id,'sold'=>0]) -> get())]);
+       }else{
+           session(['cart-items-count'=> 0]);
+       }
+   }
 ?>
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <a href="{{url("/")}}"><img src="{{asset("img/Logo.png")}}" alt="Logo" width="130px"></a>
@@ -23,14 +26,15 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
                 <li><a class="nav-link pr-3" href="{{url('/')}}">Home</a></li>
-                <li><a class="nav-link pr-4" href="{{url('bracelets')}}">Bracelets</a></li>
-                <li><a class="nav-link pr-4" href="{{url('articles')}}">Articles</a></li>
+                <li><a class="nav-link pr-4" href="{{route('bracelets')}}">Bracelets</a></li>
+                <li><a class="nav-link pr-4" href="{{route('articles')}}">Articles</a></li>
                 <li><a class="nav-link pr-4" href="{{url('partners')}}">Partners</a></li>
-                <li><a class="nav-link pr-4" href="{{url('cart')}}"><i class="fas fa-shopping-cart"></i>
-                        <span class="badge ml-2 rounded-circle bg-secondary text-white"><?php echo session('cart-items-count');?></span></a></li>
-{{--                $_SESSION['cart-items-count'--}}
-                @guest
 
+                @if(\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user() -> role_id == 2)
+                    <li><a class="nav-link pr-4" href="{{route('sales')}}">Reports</a></li>
+                @endif
+
+                @guest
                     @if (Route::has('login'))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -43,6 +47,8 @@
                         </li>
                     @endif
                 @else
+                    <li><a class="nav-link pr-4" href="{{url('cart')}}"><i class="fas fa-shopping-cart"></i>
+                            <span class="badge ml-2 rounded-circle bg-secondary text-white"><?php echo session('cart-items-count');?></span></a></li>
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }}
@@ -62,8 +68,6 @@
                         </div>
                     </li>
                 @endguest
-{{--                Adding bracelet to the cart--}}
-{{--                <li class="navbar-item pr-3"><a class="nav-link" href="{{url('cart')}}"><i class="fas fa-shopping-cart"></i></a></li>--}}
             </ul>
         </div>
     </div>
