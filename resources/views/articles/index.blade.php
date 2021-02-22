@@ -27,7 +27,7 @@
         </div>
     </div>
 {{--    Vue js--}}
-    <div id="app">
+    <div id="appv">
         <Articles></Articles>
     </div>
 
