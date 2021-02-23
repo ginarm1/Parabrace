@@ -7,7 +7,6 @@ use App\Model\Bracelet;
 use App\Model\Item;
 use App\Http\Resources\CartResource as CartResource;
 use App\Model\Order;
-use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,17 +19,19 @@ class CartController extends Controller
      */
     public function api()
     {
-        $order = Order::where('user_id',1)->latest()->get();
-
+//        It wasn't possible to dynamic Auth::id, if logged in user id is not 2, change $user_id
+        $user_id = 2;
+        $order = Order::where('user_id',$user_id)->latest()->get();
         $items = CartResource::collection(Item::where('order_id',$order[0]->id) -> orderBy('created_at','DESC') -> paginate(4));
         return $items;
     }
+
     public function index(){
-//        $items = CartResource::collection(Item::all());
-//        $order = Order::where('user_id',1)->latest()->get();
-        $user_id = Auth::user()->id;
-        $itemsTemp = Item::where('user_id',$user_id)->get();
-        $items = CartResource::collection($itemsTemp);
+
+        $user_id = Auth::id();
+
+        $order = Order::where('user_id',$user_id)->latest()->get();
+        $items = CartResource::collection(Item::where('order_id',$order[0]->id) -> orderBy('created_at','DESC') -> paginate(4));
         return view('cart.index',compact('items','user_id'));
     }
 
@@ -50,18 +51,21 @@ class CartController extends Controller
             $order -> save();
 
             $empty_cart = true;
-            return redirect('/bracelets')->with('success','Item: '.$not_sold_items[0] -> name. ' has been added');
-        }
-        foreach ($not_sold_items as $not_sold_item) {
-            if($not_sold_item -> name == $bracelet -> name){
-                $not_sold_item -> quantity += 1;
-                $not_sold_item -> save();
+//            return redirect('/bracelets')->with('success','Item: '.$not_sold_items[0] -> name. ' has been added');
+        }else{
+            foreach ($not_sold_items as $not_sold_item) {
+                if($not_sold_item -> name == $bracelet -> name){
+                    $not_sold_item -> quantity += 1;
+                    $not_sold_item -> save();
 
-                $items = Item::all();
-                session(['cart-items-count' =>count($items) ] );
-                return redirect('/bracelets')->with('success','Item: '.$not_sold_item -> name. ' has been added');
+                    $items = Item::all();
+                    session(['cart-items-count' =>count($items) ] );
+                    return redirect('/bracelets')->with('success',
+                        'Item: '.$not_sold_item -> name. ' has been added');
+                }
             }
         }
+
         if($empty_cart || !$same_item){
             $item = new Item;
             $order = Order::where('user_id',$user_id)->latest()->get('id');
@@ -80,22 +84,27 @@ class CartController extends Controller
             session(['cart-items-count' =>count($items) ] );
             return redirect('/bracelets')->with('success','Item: '.$item -> name. ' has been added');
         }
-//        $item = new Item;
-//        $order = Order::where('user_id',$user_id)->latest()->get('id');
-//
-//        $item -> name = $bracelet -> name;
-//        $item -> user_id = $user_id;
-//        $item -> quantity += 1;
-//        $item -> image = $bracelet -> image;
-//        $item -> order_id = $order[0] -> id;
 
-//        if($bracelet -> lower_cost != null)
-//            $item -> cost = $bracelet -> lower_cost;
-//        else $item -> cost = $bracelet -> cost;
+    }
+    public function minusOneFromCart($bracelet_id){
+        $user_id = Auth::user()->id;
+        $bracelet = Bracelet::findOrFail($bracelet_id);
+        $not_sold_item = Item::where(['user_id'=>$user_id,'sold'=>0,'name'=>$bracelet->name])->latest()->get();
+        $not_sold_item[0] -> quantity -= 1;
+        if($not_sold_item[0] -> quantity == 0){
+            $not_sold_item[0] -> delete();
 
-
-//        $item -> save();
-
+//            checking if it was the only item in the cart
+            $not_sold_item = Item::where(['user_id'=>$user_id,'sold'=>0])->latest()->get();
+            if(count($not_sold_item) == 0){
+                $order = Order::where(['user_id'=>$user_id,'total_cost'=>0.0]) -> latest() -> get();
+                $order[0] -> delete();
+            }
+        }else{
+            $not_sold_item[0] -> save();
+        }
+        return redirect('/bracelets') -> with('success',
+            'Bracelet '.$bracelet->name. ' was removed from the cart by 1');
     }
     /**
      * Show the form for creating a new resource.

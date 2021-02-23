@@ -33,47 +33,58 @@
                             $bracelet_in_cart = false;
                             $count_same_bracelets = 0;
                             ?>
-{{--                            <p>{{$last_order}}</p>--}}
-                            @if(!$empty_cart)
-                                @foreach($items as $item)
-                                    @if($item -> name === $bracelet->name)
-                                        <?php
-                                        $bracelet_in_cart = true;
-                                        $count_same_bracelets = $item -> quantity;
-                                        ?>
+
+                            @if($bracelet->on_stock_quantity > 0)
+{{--                                --}}
+                                @if(!$empty_cart)
+                                    @foreach($items as $item)
+                                        @if($item -> name === $bracelet->name)
+                                            <?php
+                                            $bracelet_in_cart = true;
+                                            $count_same_bracelets = $item -> quantity;
+                                            ?>
+                                        @endif
+                                    @endforeach
+
+                                    @if($bracelet_in_cart)
+
+                                        <p class="mt-3" style="color: black"><b>Now in cart: {{ $count_same_bracelets}}</b></p>
+    {{--                                    <p>User id: {{$user_id}}</p>--}}
+    {{--                                    <p>Bracelet id: {{$bracelet->id}}</p>--}}
+                                        {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id],
+                                                'method'=>'POST' , 'class' => 'mt-3']) !!}
+                                        {{Form::hidden('_method','POST')}}
+                                        {{Form::submit('Add one more',['class' => 'btn btn-danger mb-4'])}}
+                                        {!! Form::close() !!}
+
+                                        {!! Form::open(['action' => ['Api\CartController@minusOneFromCart', $bracelet->id],
+                                                'method'=>'POST' , 'class' => 'mt-3']) !!}
+                                        {{Form::hidden('_method','POST')}}
+                                        {{Form::submit('Remove 1 quantity',['class' => 'btn btn-dark mb-4'])}}
+                                        {!! Form::close() !!}
+                                    @else
+                                        {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id],
+                                                'method'=>'POST' , 'class' => 'mt-3']) !!}
+                                        {{Form::hidden('_method','POST')}}
+                                        {{Form::submit('To the car',['class' => 'btn btn-danger mb-4'])}}
+                                        {!! Form::close() !!}
                                     @endif
-                                @endforeach
-
-                                @if($bracelet_in_cart)
-
-                                    <p class="mt-3" style="color: black"><b>Now in cart: {{ $count_same_bracelets}}</b></p>
-{{--                                    <p>User id: {{$user_id}}</p>--}}
-{{--                                    <p>Bracelet id: {{$bracelet->id}}</p>--}}
-                                    {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id, $user_id],
-                                            'method'=>'POST' , 'class' => 'mt-3']) !!}
-                                    {{Form::hidden('_method','POST')}}
-                                    {{Form::submit('Add one more',['class' => 'btn btn-danger mb-4'])}}
-                                    {!! Form::close() !!}
                                 @else
                                     {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id],
-                                            'method'=>'POST' , 'class' => 'mt-3']) !!}
+                                      'method'=>'POST' , 'class' => 'mt-3']) !!}
                                     {{Form::hidden('_method','POST')}}
                                     {{Form::submit('To the car',['class' => 'btn btn-danger mb-4'])}}
                                     {!! Form::close() !!}
                                 @endif
                             @else
-                                {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id],
-                                  'method'=>'POST' , 'class' => 'mt-3']) !!}
-                                {{Form::hidden('_method','POST')}}
-                                {{Form::submit('To the car',['class' => 'btn btn-danger mb-4'])}}
-                                {!! Form::close() !!}
+                                <p>No bracelets left</p>
+{{--                                --}}
                             @endif
-
                         </div>
                     </a>
                 @endguest
             @empty
-                <p>No articles found</p>
+                <p>There are no bracelets</p>
             @endforelse
 
             <div class="row d-inline text-center">

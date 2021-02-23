@@ -20,7 +20,7 @@
             <div class="container">
                 @csrf
 
-                {!! Form::open(['action' => ['BraceletsController@store',$user->id],'method'=>'POST','enctype' => 'multipart/form-data' ]) !!}
+                {!! Form::open(['action' => ['BraceletsController@store'],'method'=>'POST','enctype' => 'multipart/form-data' ]) !!}
                 <div class="form-group">
                     {{Form::label('title','Name:')}}
                     {{Form::text('name','',['class'=>'form-control','placeholder'=>'Insert name'])}}

@@ -3,7 +3,6 @@
     <div class="container-fluid">
         <div class="row jumbotron">
 <!--            @if(Gate::allows('admins-only'))-->
-
             <div class="row">
                 <a :href="url"><button class="btn btn-primary">Create article</button></a>
             </div>

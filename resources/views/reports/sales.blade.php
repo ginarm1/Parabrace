@@ -5,7 +5,7 @@
         <p>U - user, D - delivery</p>
 
         <a href="{{route('users-report')}}"><button class="btn btn-dark my-4">Users</button></a>
-        <h5>Total earned: {{$total_earned}}</h5>
+        <h5>Total earned: {{$total_earned}} eur</h5>
         <table class="table">
             <thead>
                 <tr class="text-center">
@@ -17,14 +17,19 @@
                     <th scope="col">D city</th>
                     <th scope="col">D address</th>
                     <th scope="col">D phone nr.</th>
-                    <th scope="col">Order last updated</th>
+                    <th scope="col">Order was last updated</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($orders as $order)
                     <tr class="text-center">
                         <th scope="row">{{$order->id}}</th>
-                        <td>{{$order -> total_cost}}</td>
+                        @if($order->total_cost == 0)
+                            <td>Didn't finished order</td>
+                        @else
+                            <td>{{$order -> total_cost}}</td>
+                            @endif
+
                         @foreach($users as $user)
                             @if($order->user_id == $user->id)
                                 <td>{{$user->name}}</td>

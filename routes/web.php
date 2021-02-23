@@ -37,6 +37,7 @@ Route::prefix('bracelets') ->group(function (){
     Route::get('/{id}',[BraceletsController::class,'show'])->middleware('auth');
 
     Route::post('/buy/{id}',[CartController::class,'addToCart']);
+    Route::post('/remove/by-one/{id}',[CartController::class,'minusOneFromCart']);
 });
 
 

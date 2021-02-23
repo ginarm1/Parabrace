@@ -28,12 +28,14 @@
 
                             <p>Suits for men and women</p>
                         </div>
-                         @if(Gate::allows('admins-only'))
-                            {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id],'method'=>'POST' , 'class' => 'mt-3']) !!}
+
+                            {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id],
+                                            'method'=>'POST' , 'class' => 'mt-3']) !!}
                             {{Form::hidden('_method','POST')}}
                             {{Form::submit('To the car',['class' => 'btn btn-danger mb-4'])}}
                             {!! Form::close() !!}
 
+                        @if(Gate::allows('admins-only'))
                             <a href="{{route('bracelets')}}/{{$bracelet->id}}/edit"><button class="btn btn-secondary">Edit</button></a>
                             <button class="btn btn-danger mt-3 ml-3" id="btn_delete">Delete</button>
                             {!! Form::open(['action' => ['BraceletsController@destroy', $bracelet->id],'method'=>'POST' , 'class' => 'mt-3']) !!}

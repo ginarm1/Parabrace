@@ -2,7 +2,7 @@
     <div class="items-container container" v-if="items.length !== 0 && !isOrderFinished(items)">
 
         <h2 class="total_label my-4" v-if="count === 0">Total Cost: € {{total = totalCost(items,0).toFixed(2)}}</h2>
-        <h2 class="total_label my-4" v-if="count !== 0">Total Cost: € {{total.toFixed(2)}}</h2>
+        <h2 class="total_label my-4" v-if="count !== 0">Total Cost: € {{total}}</h2>
 
 <!--            <form @submit.prevent="updateOrder" class="mb-3">-->
 <!--                <button class="btn btn-success" type="submit" >Save</button>-->
@@ -18,11 +18,11 @@
 <!--                    <h5 class="p-3" style="color: black">Sold: {{ item.sold }}</h5>-->
                     <div class="quantity-container">
                         <button class="btn btn-light" @click="minusOneItem(item);count++" v-if="item.quantity === 1" :disabled="minusOneItem(item)">-</button>
-                        <button class="btn btn-light" @click="minusOneItem(item); total = totalCostMinus(item,total);count++" v-else>-</button>
+                        <button class="btn btn-light" @click="minusOneItem(item); total = totalCostMinus(item,total).toFixed(2);count++" v-else>-</button>
                         <p>Quantity: {{ item.quantity }}</p>
-                        <button class="btn btn-light" @click="addOneItem(item);total = totalCostPlus(item,total);count++">+</button>
+                        <button class="btn btn-light" @click="addOneItem(item);total = totalCostPlus(item,parseFloat(total));count++">+</button>
                     </div>
-                    <p style="display: inline">€ {{ (item.cost * item.quantity).toFixed(2) }}</p>
+                    <p style="display: inline">€ {{ (item.cost * item.quantity).toFixed(2)}}</p>
                     <div>
                         <button @click="deleteArticle(item.id)" id="delete" class="btn btn-danger mb-3">Delete item</button>
                     </div>
@@ -41,7 +41,7 @@
 
 
     </div>
-    <h3 v-else class="text-center py-4">Cart is empty</h3>
+    <h3 v-else class="text-center py-4">Cart is empty <p>NOTE: if you put item to the cart, but it doesn't show it here, then change $user_id in api/CartController func api(). </p></h3>
 
 
 </template>

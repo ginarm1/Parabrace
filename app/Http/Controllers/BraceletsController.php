@@ -33,6 +33,8 @@ class BraceletsController extends Controller
         $user_id = Auth::id();
 
 
+        $empty_cart = true;
+
         if($user_id != null){
             $last_order = Order::where('user_id',$user_id)->orderBy('id','desc')->first();
 
@@ -48,7 +50,7 @@ class BraceletsController extends Controller
                 }
             }
         }
-        return view('bracelets.index',compact('bracelets','user_id'));
+        return view('bracelets.index',compact('bracelets','user_id','empty_cart'));
     }
 
 

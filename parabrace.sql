@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2021 at 12:50 PM
+-- Generation Time: Feb 23, 2021 at 08:00 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -76,23 +76,6 @@ INSERT INTO `article_partner` (`id`, `article_id`, `partner_id`, `created_at`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bills`
---
-
-CREATE TABLE `bills` (
-  `id` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `total_cost` float NOT NULL,
-  `sending_cost` float NOT NULL,
-  `user_email` varchar(40) NOT NULL,
-  `delivery_id` int(4) NOT NULL,
-  `gift_card_id` int(4) DEFAULT NULL,
-  `order_bracelet_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `bracelets`
 --
 
@@ -113,30 +96,11 @@ CREATE TABLE `bracelets` (
 --
 
 INSERT INTO `bracelets` (`id`, `name`, `on_stock_quantity`, `cost`, `lower_cost`, `sold_quantity`, `image`, `created_at`, `updated_at`) VALUES
-(1, 'Lithuanian', 9, 8.99, 6.99, 0, 'lithuanian.jpg', '2020-12-01 16:03:54', '2020-12-01 16:03:54'),
-(2, 'Brown & Yellow', 3, 7.99, NULL, 0, 'brown-yellow.jpg', '2020-12-01 16:04:06', '2020-12-01 16:04:06'),
-(4, 'Brown', 5, 7.99, NULL, 0, 'brown.jpg', '2020-12-01 16:04:19', '2020-12-01 16:04:19'),
+(1, 'Lithuanian', 8, 8.99, 6.99, 1, 'lithuanian.jpg', '2020-12-01 16:03:54', '2021-02-22 15:58:55'),
+(2, 'Brown & Yellow', 2, 7.99, NULL, 1, 'brown-yellow.jpg', '2020-12-01 16:04:06', '2021-02-21 16:28:10'),
+(4, 'Brown', 3, 7.99, NULL, 2, 'brown.jpg', '2020-12-01 16:04:19', '2021-02-22 09:21:45'),
 (5, 'Black & White', 8, 6.99, NULL, 0, 'black-white.png', '2020-12-02 16:04:27', '2020-12-02 16:04:27'),
-(11, 'Red and green', 10, 5.99, NULL, 0, 'red-green.jpg', '2020-12-05 21:02:14', '2020-12-07 16:04:42'),
-(21, 'Gintaras', 4, 3, NULL, 0, 'film_1612086778.png', '2021-01-31 07:52:58', '2021-01-31 07:52:58');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `client`
---
-
-CREATE TABLE `client` (
-  `email` varchar(40) NOT NULL,
-  `password` varchar(40) NOT NULL,
-  `name` varchar(40) NOT NULL,
-  `surname` varchar(40) NOT NULL,
-  `address` varchar(40) NOT NULL,
-  `city` varchar(30) NOT NULL,
-  `post_code` varchar(8) NOT NULL,
-  `country` varchar(40) NOT NULL,
-  `phone_nr` varchar(12) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(11, 'Red and green', 4, 5.99, NULL, 6, 'red-green.jpg', '2020-12-05 21:02:14', '2021-02-22 15:58:55');
 
 -- --------------------------------------------------------
 
@@ -162,10 +126,13 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `items` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(4) NOT NULL,
   `name` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `quantity` int(4) NOT NULL,
   `cost` double(10,2) NOT NULL,
+  `sold` tinyint(1) NOT NULL DEFAULT 0,
+  `order_id` int(6) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -174,9 +141,15 @@ CREATE TABLE `items` (
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`id`, `name`, `image`, `quantity`, `cost`, `created_at`, `updated_at`) VALUES
-(1, 'Brown & Yellow', 'brown-yellow.jpg', 1, 7.99, '2021-01-28 20:04:04', '2021-01-28 20:04:04'),
-(27, 'Lithuanian', 'lithuanian.jpg', 1, 6.99, '2021-01-29 12:16:33', '2021-01-29 12:16:33');
+INSERT INTO `items` (`id`, `user_id`, `name`, `image`, `quantity`, `cost`, `sold`, `order_id`, `created_at`, `updated_at`) VALUES
+(37, 1, 'Brown & Yellow', 'brown-yellow.jpg', 1, 7.99, 1, 3, '2021-02-21 07:57:17', '2021-02-21 16:28:11'),
+(39, 1, 'Red and green', 'red-green.jpg', 1, 5.99, 1, 3, '2021-02-21 08:29:58', '2021-02-21 16:28:11'),
+(40, 1, 'Brown', 'brown.jpg', 1, 7.99, 1, 3, '2021-02-21 15:35:42', '2021-02-21 16:28:11'),
+(41, 1, 'Brown', 'brown.jpg', 1, 7.99, 1, 4, '2021-02-22 09:03:36', '2021-02-22 09:21:46'),
+(42, 1, 'Red and green', 'red-green.jpg', 5, 5.99, 1, 5, '2021-02-22 13:49:34', '2021-02-22 15:58:55'),
+(44, 1, 'Lithuanian', 'lithuanian.jpg', 1, 6.99, 1, 5, '2021-02-22 15:19:16', '2021-02-22 15:58:55'),
+(45, 2, 'Brown & Yellow', 'brown-yellow.jpg', 1, 7.99, 0, 19, '2021-02-22 17:28:19', '2021-02-22 17:28:19'),
+(50, 1, 'Brown', 'brown.jpg', 2, 7.99, 0, 24, '2021-02-23 16:50:30', '2021-02-23 16:51:31');
 
 -- --------------------------------------------------------
 
@@ -203,23 +176,37 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (6, '2014_10_12_100000_create_password_resets_table', 5),
 (7, '2019_08_19_000000_create_failed_jobs_table', 5),
 (8, '2020_12_08_174732_create_sessions_table', 6),
-(9, '2021_01_28_130124_create_items_table', 7);
+(9, '2021_01_28_130124_create_items_table', 7),
+(11, '2021_02_14_100120_create_orders_table', 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_bracelet`
+-- Table structure for table `orders`
 --
 
-CREATE TABLE `order_bracelet` (
-  `id` int(4) NOT NULL,
-  `user_email` varchar(40) NOT NULL,
-  `date` date NOT NULL,
-  `bracelet_quantity` int(3) NOT NULL,
-  `wrist_size` varchar(30) NOT NULL,
-  `buckle_color` varchar(20) NOT NULL,
-  `bracelet_id` int(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `orders` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `total_cost` double(10,2) NOT NULL DEFAULT 0.00,
+  `country` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone_nr` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `total_cost`, `country`, `city`, `address`, `phone_nr`, `created_at`, `updated_at`) VALUES
+(3, 1, 32.95, 'Lithuania', 'Kaunas', 'Skliausto g., 35-21', '+37065224312', '2021-02-21 07:57:17', '2021-02-21 16:28:11'),
+(4, 1, 10.98, 'Liechtenstein', 'Kaunas', 'Skliausto g., 35-21', '+37065224312', '2021-02-22 09:03:36', '2021-02-22 09:21:46'),
+(5, 1, 15.97, 'Lithuania', 'Kaunas', 'Entai g., 35-21', '+37065224312', '2021-02-22 13:49:34', '2021-02-22 15:58:55'),
+(19, 2, 0.00, 'LT', 'Kaunas', 'Rasos g., 35-21', '865423542', '2021-02-22 17:28:19', '2021-02-22 17:28:19'),
+(20, 1, 0.00, 'Lithuania', 'Kaunas', 'Skliausto g., 35-21', '+37065224312', '2021-02-23 16:18:26', '2021-02-23 16:18:26');
 
 -- --------------------------------------------------------
 
@@ -315,7 +302,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname`, `email`, `phone_nr`, `country`, `city`, `address`, `password`, `role_id`, `created_at`, `updated_at`, `email_verified_at`, `remember_token`) VALUES
-(1, 'Gintaras', 'Armo', 'gintaras.armonaitis@gmail.com', '+37065224312', 'Lithuania', 'Kaunas', 'Skliausto g., 35-21', '$2y$10$U1opo4p/3AeaHQONTDnbeu1HR4bC15Atny5w7/QXBIOg9CMMgj6UK', 2, '2020-12-05 17:21:02', '2020-12-05 17:21:02', NULL, 'Lr5wNFdufQjXwbxLgiULnjStyAH4bxjJ2eN8OBRGPJk3dUVHonYT5qoplFiF'),
+(1, 'Gintaras', 'Armo', 'gintaras.armonaitis@gmail.com', '+37065224312', 'Lithuania', 'Kaunas', 'Skliausto g., 35-21', '$2y$10$U1opo4p/3AeaHQONTDnbeu1HR4bC15Atny5w7/QXBIOg9CMMgj6UK', 2, '2020-12-05 17:21:02', '2020-12-05 17:21:02', NULL, 'J7xpRCm2imfmuUL7dgeX1h7wGMX9AVAb1qaCOOi3WmMRPdyD0yzX0fZ1WKqx'),
 (2, 'Petras', 'Petraitis', 'p@gmail.com', '865423542', 'LT', 'Kaunas', 'Rasos g., 35-21', '$2y$10$SgQ6cXPjyis65jhZtnazrOeTkGV5Z1lA13WxPDHlj/mZwp0QxuaPq', 1, '2020-12-07 14:12:13', '2020-12-07 14:12:13', NULL, NULL);
 
 --
@@ -336,27 +323,11 @@ ALTER TABLE `article_partner`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `bills`
---
-ALTER TABLE `bills`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_email` (`user_email`),
-  ADD UNIQUE KEY `delivery_id` (`delivery_id`),
-  ADD UNIQUE KEY `gift_card_id` (`gift_card_id`),
-  ADD KEY `order_bracelet_id` (`order_bracelet_id`);
-
---
 -- Indexes for table `bracelets`
 --
 ALTER TABLE `bracelets`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `Name` (`name`);
-
---
--- Indexes for table `client`
---
-ALTER TABLE `client`
-  ADD PRIMARY KEY (`email`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -378,11 +349,10 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `order_bracelet`
+-- Indexes for table `orders`
 --
-ALTER TABLE `order_bracelet`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `bracelet_id` (`bracelet_id`);
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `partners`
@@ -438,12 +408,6 @@ ALTER TABLE `article_partner`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT for table `bills`
---
-ALTER TABLE `bills`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `bracelets`
 --
 ALTER TABLE `bracelets`
@@ -459,13 +423,19 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `partners`
@@ -484,17 +454,6 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `bills`
---
-ALTER TABLE `bills`
-  ADD CONSTRAINT `bills_ibfk_1` FOREIGN KEY (`user_email`) REFERENCES `client` (`email`),
-  ADD CONSTRAINT `bills_ibfk_4` FOREIGN KEY (`order_bracelet_id`) REFERENCES `order_bracelet` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

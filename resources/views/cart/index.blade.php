@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('content')
     <div id="appv" style="background: #fff7ed">
-{{--        <p>Order: {{$order[0]}}</p>--}}
+{{--        <p>User: {{$user_id}}</p>--}}
         <Cart></Cart>
     </div>
 @endsection
