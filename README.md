@@ -11,9 +11,8 @@ $ git clone https://github.com/ginarm1/Parabrace
 
 $ composer install
 
-$ php artisan migrate
-
 ```
+In phpmyadmin import sql file, in which dump data is: parabrace.sql
 
 After cloning the project, install npm package and Vue.js
 
@@ -24,7 +23,11 @@ $ npm install vue
 $ npm run watch
 
 ```
+When everything is done, follow this link: http://localhost/Projects/parabrace/public/
 
-MySQL data can be found in file: parabrace.sql
+Thank you for your interest!
+
+
+PS. MySQL data can be found in file: parabrace.sql
 
 Pictures can be found in: storage
