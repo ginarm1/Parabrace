@@ -25,7 +25,10 @@ $ npm run watch
 ```
 When everything is done, follow this link: http://localhost/Projects/parabrace/public/
 
+
 Thank you for your interest!
+
+
 
 
 PS. MySQL data can be found in file: parabrace.sql
