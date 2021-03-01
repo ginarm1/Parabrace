@@ -80,7 +80,7 @@ class CartController extends Controller
             else $item -> cost = $bracelet -> cost;
             $item -> save();
 
-            $items = Item::all();
+            $items = Item::where('order_id',$order->id)->get();
             session(['cart-items-count' =>count($items) ] );
             return redirect('/bracelets')->with('success','Item: '.$item -> name. ' has been added');
         }

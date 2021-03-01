@@ -49,7 +49,7 @@
                                     @if($bracelet_in_cart)
 
                                         <p class="mt-3" style="color: black"><b>Now in cart: {{ $count_same_bracelets}}</b></p>
-    {{--                                    <p>User id: {{$user_id}}</p>--}}
+    {{--                    y                <p>User id: {{$user_id}}</p>--}}
     {{--                                    <p>Bracelet id: {{$bracelet->id}}</p>--}}
                                         {!! Form::open(['action' => ['Api\CartController@addToCart', $bracelet->id],
                                                 'method'=>'POST' , 'class' => 'mt-3']) !!}
